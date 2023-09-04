@@ -18,7 +18,7 @@ const LandingPage = () => {
         <Row>
           <div className="intro-text">
             <div>
-              <h1 className="title">Welcome to SellSync</h1>
+              <h1 className="title">Welcome to empower</h1>
               <p className="subtitle">
                Craft, Curate, Consume: The Marketplace for All
               </p>

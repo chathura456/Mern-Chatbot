@@ -23,7 +23,7 @@ const Header = () => {
     <Navbar bg="primary" expand="sm" variant="dark">
       <Container>
         <Navbar.Brand>
-          <Link to="/mynotes"><h2>SellSync</h2></Link>
+          <Link to="/mynotes"><h2>empower</h2></Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
