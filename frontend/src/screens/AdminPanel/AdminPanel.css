@@ -1,0 +1,26 @@
+.admin-panel {
+    display: flex;
+    height: 100vh; /* This will make the panel take the full height of the viewport */
+}
+
+.sidebar {
+    flex: 1; /* This will make the sidebar take 1/3 of the available width */
+    overflow-y: auto; /* This will add a scrollbar if the content exceeds the height */
+    border-right: 1px solid #ccc; /* This adds a border between the sidebar and the chat interface */
+    padding: 10px;
+}
+
+.chat-interface {
+    flex: 2; /* This will make the chat interface take 2/3 of the available width */
+    padding: 10px;
+}
+
+.chat-session {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.chat-session:hover {
+    background-color: #f5f5f5; /* This will change the background color when you hover over a chat session */
+}

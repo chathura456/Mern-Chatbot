@@ -1,0 +1,16 @@
+.profilePic {
+  width: 300px; /* Adjust this value to your desired width */
+  height: 300px; /* Adjust this value to your desired height */
+  object-fit: cover; /* Ensures the image covers the entire space without distortion */
+  border: 2px solid #333; /* Optional: Adds a border around the image */
+}
+
+.profileContainer {
+  display: flex;
+  margin: 20px;
+}
+@media only screen and (max-width: 768px) {
+  .profileContainer {
+    flex-direction: column-reverse;
+  }
+}
