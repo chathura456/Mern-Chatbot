@@ -35,6 +35,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ChatBot from 'react-simple-chatbot';
+import { ThemeProvider } from 'styled-components';
 import { listNotes } from "../../actions/notesActions";
 import ChatComponent from "./ChatComponent";
 import './MyNotes.css';
@@ -48,6 +49,19 @@ const MyNotes = () => {
   const [chatbotKey, setChatbotKey] = useState(Date.now());
   const [chatSteps, setChatSteps] = useState(getSteps(setChatbotKey));
   const [chatMode, setChatMode] = useState('bot');
+
+  const theme = {
+    background: '#f5f8fb',
+    fontFamily: 'Helvetica Neue',
+    headerBgColor: '#158cba',
+    headerFontColor: '#fff',
+    headerFontSize: '15px',
+    botBubbleColor: '#158cba',
+    botFontColor: '#fff',
+    userBubbleColor: '#fff',
+    userFontColor: '#4a4a4a',
+  };
+  
 
   useEffect(() => {
     dispatch(listNotes());
@@ -63,7 +77,8 @@ const MyNotes = () => {
         </button>
         <br/>
         {chatMode === 'bot' ? (
-          <ChatBot key={chatbotKey} steps={chatSteps} />
+          <ThemeProvider theme={theme}>
+          <ChatBot key={chatbotKey} steps={chatSteps} /></ThemeProvider>
         ) : (
           <ChatComponent />
         )}

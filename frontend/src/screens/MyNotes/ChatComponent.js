@@ -201,8 +201,6 @@ function ChatComponent() {
         userFontColor: '#4a4a4a',
       };
 
-      const defaultUserImage = "https://img.freepik.com/premium-vector/man-avatar-profile-round-icon_24640-14044.jpg?w=2000";
-
 
       const UserBubbleContainer = styled.div`
   align-items: flex-end;
