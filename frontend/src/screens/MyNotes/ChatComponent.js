@@ -167,9 +167,12 @@ function ChatComponent() {
 
 export default ChatComponent;
 */
+
+
+/*
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import ChatBot from 'react-simple-chatbot';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
 const theme = {
     background: '#f5f8fb',
@@ -253,6 +256,25 @@ function ChatComponent() {
     const [chatData, setChatData] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+    const [message, setMessage] = useState('I have a problem');
+
+    const sendMessage = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/chat/send', {
+                sender: 'user',
+                message: message
+            });
+
+            if (response.status === 200) {
+                console.log('Message sent successfully:', response.data);
+            } else {
+                console.log('Failed to send message:', response.data);
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
+
     useEffect(() => {
         fetch('http://localhost:5000/api/chat/messages')
             .then(response => response.json())
@@ -265,13 +287,74 @@ function ChatComponent() {
             });
     }, []);
 
-    return isDataLoaded ? (
+   /* return isDataLoaded ? (
         <ThemeProvider theme={theme}>
             <ChatBot steps={mapChatDataToSteps(chatData)} />
         </ThemeProvider>
     ) : (
         <div>Loading chat...</div>
+    );*/
+    /*
+    return (
+        <div>
+            <input 
+                type="text" 
+                value={message} 
+                onChange={(e) => setMessage(e.target.value)} 
+                placeholder="Enter your message"
+            />
+            <button onClick={sendMessage}>Send Message</button>
+        </div>
     );
 }
 
-export default ChatComponent;
+export default ChatComponent;*/
+
+
+import axios from 'axios';
+import React from 'react';
+import ChatBot from 'react-simple-chatbot';
+
+const MyChatBot = () => {
+    const sendMessageToBackend = async (message) => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/chat/send', {
+                sender: 'admin',
+                message: message
+            });
+
+            if (response.status === 200) {
+                console.log('Message sent successfully:', response.data);
+            } else {
+                console.log('Failed to send message:', response.data);
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
+
+    const steps = [
+        {
+            id: '1',
+            message: 'Hello! How can I help you?',
+            trigger: 'userMessage'
+        },
+        {
+            id: 'userMessage',
+            user: true,
+            validator: (value) => {
+                sendMessageToBackend(value);
+                return true; // Always return true to continue the conversation
+            },
+            trigger: '1' // Loop back to the initial message for continuous conversation
+        }
+    ];
+
+    return (
+        <ChatBot
+            steps={steps}
+        />
+    );
+}
+
+export default MyChatBot;
