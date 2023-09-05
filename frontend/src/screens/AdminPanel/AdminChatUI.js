@@ -92,7 +92,7 @@ const mapChatDataToSteps = (data) => {
             sendMessageToBackend(value);
             return true; // Always return true to continue the conversation
         },
-        trigger: 'response'
+        trigger: 'userInput'
     };
 
     const responseStep = {
