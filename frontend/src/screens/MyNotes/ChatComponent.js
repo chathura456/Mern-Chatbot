@@ -1,5 +1,4 @@
-import React from 'react';
-import ChatBot from 'react-simple-chatbot';
+
 /*function ChatComponent() {
     const hardcodedSteps = [
         {
@@ -168,77 +167,56 @@ function ChatComponent() {
 
 export default ChatComponent;
 */
-
+import React, { useEffect, useState } from 'react';
+import ChatBot from 'react-simple-chatbot';
 import styled, { ThemeProvider } from 'styled-components';
 
-function ChatComponent() {
-   const chatData = [
-        {
-            "_id": "64f5808a338e0160e6dd9eca",
-            "sender": "user",
-            "message": "Hello, Admin!",
-            "timestamp": "2023-09-04T07:00:26.274Z",
-            "__v": 0
-        },
-        {
-            "_id": "64f64870ae7695dcc4a295e4",
-            "sender": "admin",
-            "message": "Welcome",
-            "timestamp": "2023-09-04T21:13:20.576Z",
-            "__v": 0
-        }
-    ];
+const theme = {
+    background: '#f5f8fb',
+    fontFamily: 'Helvetica Neue',
+    headerBgColor: '#158cba',
+    headerFontColor: '#fff',
+    headerFontSize: '15px',
+    botBubbleColor: '#158cba',
+    botFontColor: '#fff',
+    userBubbleColor: '#fff',
+    userFontColor: '#4a4a4a',
+};
 
-    const theme = {
-        background: '#f5f8fb',
-        fontFamily: 'Helvetica Neue',
-        headerBgColor: '#158cba',
-        headerFontColor: '#fff',
-        headerFontSize: '15px',
-        botBubbleColor: '#158cba',
-        botFontColor: '#fff',
-        userBubbleColor: '#fff',
-        userFontColor: '#4a4a4a',
-      };
-
-
-      const UserBubbleContainer = styled.div`
+const UserBubbleContainer = styled.div`
   align-items: flex-end;
   display: flex;
   justify-content: flex-end;
   box-sizing: border-box;
-  box-shadow: none;  // Remove any shadow from the main container
-  background-color: transparent;
-`;
-// For User (right-aligned) messages
-const UserMessageBubble = styled.div`
-  align-self: flex-end;  // Align to the right  // Adjust this if you want a different background color
-  box-shadow: none;  // Remove shadow
-  margin: 0px;  // Add some margin between messages
 `;
 
-// Main chat container to ensure messages are displayed in a column
+const UserMessageBubble = styled.div`
+  align-self: flex-end;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+`;
+
 const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   padding: 0px;
   margin: 0px;
-  box-shadow: none;  // Remove any shadow from the main container
-  background-color: transparent;  // Ensure the background is transparent or set to a desired color
 `;
-  
+
 const mapChatDataToSteps = (data) => {
     const initialStep = {
         id: '0',
         message: 'Loading previous chat...',
-        trigger: data[0]._id
+        trigger: '1'
     };
 
     const chatSteps = data.map((item, index) => {
         let step = {
-            id: item._id,
-            trigger: data[index + 1] ? data[index + 1]._id : 'userInput'
+            id: (index + 1).toString(),
+            trigger: data[index + 1] ? (index + 2).toString() : 'userInput'
         };
 
         if (item.sender === 'user') {
@@ -265,20 +243,34 @@ const mapChatDataToSteps = (data) => {
     const responseStep = {
         id: 'response',
         message: 'Thank you for your input. How can I assist you further?',
-        trigger: 'userInput' // This will allow the user to keep entering messages
+        trigger: 'userInput'
     };
 
     return [initialStep, ...chatSteps, userInputStep, responseStep];
 };
 
+function ChatComponent() {
+    const [chatData, setChatData] = useState([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+    useEffect(() => {
+        fetch('http://localhost:5000/api/chat/messages')
+            .then(response => response.json())
+            .then(data => {
+                setChatData(data);
+                setIsDataLoaded(true);
+            })
+            .catch(error => {
+                console.error('Error fetching chat messages:', error);
+            });
+    }, []);
 
-    const steps = mapChatDataToSteps(chatData);
-
-    return (
+    return isDataLoaded ? (
         <ThemeProvider theme={theme}>
-        <ChatBot steps={steps} />;
-      </ThemeProvider>
+            <ChatBot steps={mapChatDataToSteps(chatData)} />
+        </ThemeProvider>
+    ) : (
+        <div>Loading chat...</div>
     );
 }
 
