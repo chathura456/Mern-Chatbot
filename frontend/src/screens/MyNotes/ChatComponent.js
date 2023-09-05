@@ -169,10 +169,11 @@ export default ChatComponent;
 */
 
 
-/*
+
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import ChatBot from 'react-simple-chatbot';
+import styled, { ThemeProvider } from 'styled-components';
 
 const theme = {
     background: '#f5f8fb',
@@ -237,31 +238,10 @@ const mapChatDataToSteps = (data) => {
         return step;
     });
 
-    const userInputStep = {
-        id: 'userInput',
-        user: true,
-        trigger: 'response'
-    };
-
-    const responseStep = {
-        id: 'response',
-        message: 'Thank you for your input. How can I assist you further?',
-        trigger: 'userInput'
-    };
-
-    return [initialStep, ...chatSteps, userInputStep, responseStep];
-};
-
-function ChatComponent() {
-    const [chatData, setChatData] = useState([]);
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
-
-    const [message, setMessage] = useState('I have a problem');
-
-    const sendMessage = async () => {
+    const sendMessageToBackend = async (message) => {
         try {
             const response = await axios.post('http://localhost:5000/api/chat/send', {
-                sender: 'user',
+                sender: 'admin',
                 message: message
             });
 
@@ -275,6 +255,29 @@ function ChatComponent() {
         }
     };
 
+    const userInputStep = {
+        id: 'userInput',
+        user: true,
+        validator: (value) => {
+            sendMessageToBackend(value);
+            return true; // Always return true to continue the conversation
+        },
+        trigger: 'response'
+    };
+
+    const responseStep = {
+        id: 'response',
+        message: 'Message Received',
+        trigger: 'userInput'
+    };
+
+    return [initialStep, ...chatSteps, userInputStep, responseStep];
+};
+
+function ChatComponent() {
+    const [chatData, setChatData] = useState([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
     useEffect(() => {
         fetch('http://localhost:5000/api/chat/messages')
             .then(response => response.json())
@@ -287,15 +290,15 @@ function ChatComponent() {
             });
     }, []);
 
-   /* return isDataLoaded ? (
+   return isDataLoaded ? (
         <ThemeProvider theme={theme}>
             <ChatBot steps={mapChatDataToSteps(chatData)} />
         </ThemeProvider>
     ) : (
         <div>Loading chat...</div>
-    );*/
-    /*
-    return (
+    );
+    
+   /* return (
         <div>
             <input 
                 type="text" 
@@ -305,12 +308,12 @@ function ChatComponent() {
             />
             <button onClick={sendMessage}>Send Message</button>
         </div>
-    );
+    );*/
 }
 
-export default ChatComponent;*/
+export default ChatComponent;
 
-
+/*
 import axios from 'axios';
 import React from 'react';
 import ChatBot from 'react-simple-chatbot';
@@ -358,3 +361,4 @@ const MyChatBot = () => {
 }
 
 export default MyChatBot;
+*/
