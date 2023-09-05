@@ -73,13 +73,16 @@ const AdminPanel = () => {
 export default AdminPanel;*/
 
 import React from 'react';
-
+import AdminChatComponent from './AdminChatUI';
+import './AdminPanel.css';
 
 const AdminPanel = () => {
    
     return (
         <div className="admin-panel">
-            
+            <h1>Admin Live Chat</h1>
+            <br></br>
+            <AdminChatComponent/>
         </div>
     );
 };

@@ -48,7 +48,7 @@ const MyNotes = () => {
   const navigate = useNavigate();
   const [chatbotKey, setChatbotKey] = useState(Date.now());
   const [chatSteps, setChatSteps] = useState(getSteps(setChatbotKey));
-  const [chatMode, setChatMode] = useState('bot');
+  const [chatMode, setChatMode] = useState('live');
 
   const theme = {
     background: '#f5f8fb',

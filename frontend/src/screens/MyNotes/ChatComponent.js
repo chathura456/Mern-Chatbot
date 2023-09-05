@@ -174,6 +174,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import ChatBot from 'react-simple-chatbot';
 import styled, { ThemeProvider } from 'styled-components';
+import CustomLoadingComponent from '../../components/LoadingComponent';
 
 const theme = {
     background: '#f5f8fb',
@@ -213,8 +214,8 @@ const ChatContainer = styled.div`
 const mapChatDataToSteps = (data) => {
     const initialStep = {
         id: '0',
-        message: 'Loading previous chat...',
-        trigger: '1'
+        message: 'Hello, This is the Admin of empower. How can I assist you today?',
+        trigger: data.length > 0 ? '1' : 'userInput'
     };
 
     const chatSteps = data.map((item, index) => {
@@ -241,7 +242,7 @@ const mapChatDataToSteps = (data) => {
     const sendMessageToBackend = async (message) => {
         try {
             const response = await axios.post('http://localhost:5000/api/chat/send', {
-                sender: 'admin',
+                sender: 'user',
                 message: message
             });
 
@@ -262,7 +263,7 @@ const mapChatDataToSteps = (data) => {
             sendMessageToBackend(value);
             return true; // Always return true to continue the conversation
         },
-        trigger: 'response'
+        trigger: 'userInput'
     };
 
     const responseStep = {
@@ -292,7 +293,7 @@ function ChatComponent() {
 
    return isDataLoaded ? (
         <ThemeProvider theme={theme}>
-            <ChatBot steps={mapChatDataToSteps(chatData)} />
+            <ChatBot loadingComponent={<CustomLoadingComponent />} steps={mapChatDataToSteps(chatData)} />
         </ThemeProvider>
     ) : (
         <div>Loading chat...</div>
